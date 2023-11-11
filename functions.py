@@ -5,6 +5,7 @@ import os
 Cette fonction fait la même chose que list_of_files,
 sauf qu'elle retourne le nom des fichiers
 d'un repertoire donné, peu importe leur type.
+Je sais pas si je la garde ou pas
 """
 
 def nom_fichiers(directory):
