@@ -2,8 +2,11 @@
 
 from functions import *
 
+#fonction principale, execute le programme entier
 def main():
-    #fonction principale, execute le programme entier
+    return
+
+
 
 
 if __name__ == "__main__":
