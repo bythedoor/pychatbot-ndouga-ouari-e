@@ -1,15 +1,13 @@
-#Programme principal du projet
+# Programme principal du projet
 
 from functions import *
 
-#fonction principale, execute le programme entier
-def main():
+
+def main():  # Fonction principale, execute le programme entier
     return
-
-
 
 
 if __name__ == "__main__":
     names = nom_fichiers("speeches")
     print_names(names)
-    #main()
+    # main()
