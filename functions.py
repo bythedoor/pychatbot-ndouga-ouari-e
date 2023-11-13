@@ -8,9 +8,11 @@ d'un repertoire donné, peu importe leur type.
 Je sais pas si je la garde ou pas
 """
 
+
 def nom_fichiers(directory):
     dir_list = os.listdir(directory)
     return dir_list
+
 
 def list_of_files(directory, extension):
     files_names = []
@@ -23,6 +25,7 @@ def list_of_files(directory, extension):
 """
 Cette fonction associe à chaque nom de président son prénom
 """
+
 def presidents(last_names):
     list_presidents = {}
     first_names = []
