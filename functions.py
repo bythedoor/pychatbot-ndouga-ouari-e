@@ -44,28 +44,24 @@ Cette fonction associe à chaque nom de président son prénom
 """
 
 def presidents(directory):
-    list_last_names(directory)
-    first_names = []
+    last_names = list_last_names(directory)
+    first_names = ["Jacques", "Valéry","François","Emmanuel","François","Nicolas"]
+    list_presidents = {}
 
     cpt = 0
     for i in first_names:
         list_presidents[i] = last_names[cpt]
         cpt += 1
+    return  list_presidents
 
 """
 Cette fonction affiche les noms des différents présidents
 """
-def print_names(names):
-    cpt = 0
+def print_names(directory):
+    names = list_last_names(directory)
 
     for i in names:
-        for j in range(len(names)):
-            if names[j] == i:
-                cpt += 1
-        if cpt > 1:
-            print(i, end=" ")
-
-    print()
+        print(i)
 
 """
 Cette fonction renvoie un fichier en minuscules
