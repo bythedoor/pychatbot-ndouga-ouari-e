@@ -13,6 +13,16 @@ def name_files(directory):
     dir_list = os.listdir(directory)
     return dir_list
 
+def list_of_files(directory, extension):
+    files_names = []
+    for filename in os.listdir(directory):
+        if filename.endswith(extension):
+            files_names.append(filename)
+    return files_names
+
+"""
+Cette fonction renvoie la liste des noms de familles des présidents
+"""
 def list_last_names(directory):
     L = name_files(directory)
     last_names = []
@@ -24,22 +34,17 @@ def list_last_names(directory):
             val = i[11:-4]
             last_names.append(val)
 
+    for l in last_names:
+        if last_names.count(l) >= 2:
+                last_names.remove(l)
     return last_names
-
-def list_of_files(directory, extension):
-    files_names = []
-    for filename in os.listdir(directory):
-        if filename.endswith(extension):
-            files_names.append(filename)
-    return files_names
-
 
 """
 Cette fonction associe à chaque nom de président son prénom
 """
 
-def presidents(last_names):
-    list_presidents = {}
+def presidents(directory):
+    list_last_names(directory)
     first_names = []
 
     cpt = 0
