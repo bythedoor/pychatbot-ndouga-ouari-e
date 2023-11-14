@@ -66,3 +66,41 @@ def lowercase(text, clean_text):
 
     return(clean_text)
 
+
+"""
+Cette fonction renvoie un fichier sans ponctiation
+"""
+
+def punctuation(text):
+    clean = lowercase(text)
+    with open(clean, "r") as f1, open(clean_text, "w") as f2:
+        for ligne in f1:
+            for i in ligne:
+                if ord(i) >= 33 and ord(i) <= 47:
+                    f2.write(chr(ord()))
+                if ord(i) == 44 or ord(i) == 45:
+                    f2.write(chr(ord(32)))
+                elif i == "\n":
+                    f2.write("\n")
+                else:
+                    f2.write(i)
+
+    return (cleane_text)
+
+"""
+Cette fonction calcule l'occurences d'un mot 
+"""
+def occurence(word, text):
+    #text = punctuation(texte)
+    tf = 0 # score tf
+    with open(text, "r") as f1:
+        for ligne in f1:
+            mot = ""
+            for i in ligne:
+                if ord(i) >=  97 and ord(i) <= 122:
+                    mot += ord(i)
+                elif ord(i) == 32:
+                    if mot == word:
+                        tf += 1
+                    mot = ""
+    return tf
