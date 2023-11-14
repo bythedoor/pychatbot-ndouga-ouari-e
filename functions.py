@@ -93,12 +93,10 @@ def punctuation(text, clean_text):
     with open(text, "r") as f1, open(clean_text, "w") as f2:
         for ligne in f1:
             for i in ligne:
-                if ord(i) >=32 and ord(i) <= 47:
+                if ord(i) >32 and ord(i) <= 47:
                     f2.write('')
-                if ord(i) == 44 or ord(i) == 45:
+                elif ord(i) == 44 or ord(i) == 45:
                     f2.write(chr(32))
-                elif i == "\n":
-                    f2.write("\n")
                 else:
                     #if not (ord(i) >=32) and not (ord(i) <= 47):
                     f2.write(i)
