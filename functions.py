@@ -9,9 +9,18 @@ Je sais pas si je la garde ou pas
 """
 
 
-def nom_fichiers(directory):
+def name_files(directory):
     dir_list = os.listdir(directory)
     return dir_list
+
+def list_last_names(directory):
+    L = name_files(directory)
+    last_names = []
+    M = "Nomination_.txt12"
+    for i in L:
+        val = i - M
+        last_names.append(val)
+    return last_names
 
 
 def list_of_files(directory, extension):
@@ -58,7 +67,7 @@ def lowercase(text, clean_text):
         for ligne in f1:
             for i in ligne:
                 if ord(i) >= 65 and ord(i) <= 90:
-                    f2.write(chr(ord(i + 32)))
+                    f2.write(chr(ord(i)+32))
                 elif i == "\n":
                     f2.write("\n")
                 else:
