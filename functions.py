@@ -16,12 +16,15 @@ def name_files(directory):
 def list_last_names(directory):
     L = name_files(directory)
     last_names = []
-    M = "Nomination_.txt12"
     for i in L:
-        val = i - M
-        last_names.append(val)
-    return last_names
+        if i[-5] == '1' or i[-5] == '2':
+            val = i[11:-5]
+            last_names.append(val)
+        else:
+            val = i[11:-4]
+            last_names.append(val)
 
+    return last_names
 
 def list_of_files(directory, extension):
     files_names = []
