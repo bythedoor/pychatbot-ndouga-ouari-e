@@ -8,6 +8,5 @@ def main():  # Fonction principale, execute le programme entier
 
 
 if __name__ == "__main__":
-    names = nom_fichiers("speeches")
-    print_names(names)
+    print(nom_fichiers("speeches"))
     # main() - on execute la fonction principale
