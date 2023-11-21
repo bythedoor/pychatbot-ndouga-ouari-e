@@ -85,13 +85,13 @@ Cette fonction renvoie un fichier sans ponctiation
 """
 
 def punctuation(text, clean_text):
-    #clean = lowercase(text)
+    #clean_text = lowercase(text, 'clean_text.txt')
     with open(text, "r") as f1, open(clean_text, "w") as f2:
         for ligne in f1:
             for i in ligne:
-                if ord(i) >32 and ord(i) <= 47:
+                if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
                     f2.write('')
-                elif ord(i) == 44 or ord(i) == 45:
+                elif ord(i) == 39 or ord(i) == 45:
                     f2.write(chr(32))
                 else:
                     #if not (ord(i) >=32) and not (ord(i) <= 47):
@@ -100,20 +100,31 @@ def punctuation(text, clean_text):
     return #(cleane_text)
 
 """
-Cette fonction calcule l'occurences d'un mot 
+Cette fonction calcule l'occurence de chaque mot et les stoques dans un dictionnaire 
 """
-def occurence(word, text):
+def tf(text):
     #text = punctuation(texte)
 
     with open(text, "r") as f1:
-        tf = 0  # score tf
+
+        d_tf = {}  #dictionnaire tf
         for ligne in f1:
-            mot = ""
+            word = ""
             for i in ligne:
                 if ord(i) >=  97 and ord(i) <= 122:
-                    mot += i
+                    word += i
                 elif ord(i) == 32:
-                    if mot == word:
-                        tf += 1
-                    mot = ""
-    return tf
+                    if word not in d_tf and word != "":
+                        s_tf = 0  # score tf
+                        for ligne2 in f1:
+                            mot = ""
+                            for j in ligne2:
+                                if ord(j) >=  97 and ord(j) <= 122:
+                                    mot += j
+                                elif ord(j) == 32:
+                                    if mot == word:
+                                        s_tf += 1
+                                    mot = ""
+                        d_tf[word] = s_tf
+                        word = ""
+    return d_tf
