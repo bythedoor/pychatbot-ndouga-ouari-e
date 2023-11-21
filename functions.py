@@ -111,7 +111,7 @@ def tf(text):
         for ligne in f1:
             word = ""
             for i in ligne:
-                if ord(i) >=  97 and ord(i) <= 122:
+                if (ord(i) >=  97 and ord(i) <= 122) or (ord(i) >=  128 and ord(i) <= 165):
                     word += i
                 elif ord(i) == 32:
                     if word not in d_tf and word != "":
@@ -119,7 +119,7 @@ def tf(text):
                         for ligne2 in f1:
                             mot = ""
                             for j in ligne2:
-                                if ord(j) >=  97 and ord(j) <= 122:
+                                if (ord(j) >=  97 and ord(j) <= 122) or (ord(i) >=  128 and ord(i) <= 165):
                                     mot += j
                                 elif ord(j) == 32:
                                     if mot == word:
