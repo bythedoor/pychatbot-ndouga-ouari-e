@@ -108,23 +108,16 @@ def tf(text):
     with open(text, "r") as f1:
 
         d_tf = {}  #dictionnaire tf
-        for ligne in f1:
-            word = ""
-            for i in ligne:
-                if (ord(i) >=  97 and ord(i) <= 122) or (ord(i) >=  128 and ord(i) <= 165):
-                    word += i
-                elif ord(i) == 32:
-                    if word not in d_tf and word != "":
-                        s_tf = 0  # score tf
-                        for ligne2 in f1:
-                            mot = ""
-                            for j in ligne2:
-                                if (ord(j) >=  97 and ord(j) <= 122) or (ord(i) >=  128 and ord(i) <= 165):
-                                    mot += j
-                                elif ord(j) == 32:
-                                    if mot == word:
-                                        s_tf += 1
-                                    mot = ""
-                        d_tf[word] = s_tf
-                        word = ""
+
+        # transformation du texte en chaine de caractère
+        chaine_mot = f1.read()
+        # transformation en liste de mot
+        mots = chaine_mot.split()
+
+        # boucle parcourant la liste de mot
+        for mot in mots:
+            if mot:
+                # Incrémentation du dictionnaire à chaque apparition de chaque mot
+                d_tf[mot] = d_tf.get(mot, 0) +1
+
     return d_tf
