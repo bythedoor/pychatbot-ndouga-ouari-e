@@ -13,7 +13,9 @@ def name_files(directory):
     dir_list = os.listdir(directory)
     return dir_list
 
-
+"""
+Fonction copiée-collée de l'énoncé du projet
+"""
 def list_of_files(directory, extension):
     files_names = []
     for filename in os.listdir(directory):
@@ -248,15 +250,39 @@ def matrix_tf_idf(directory):
 """
 Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
-def null_tf_idf():
-    print(idf("speeches"))
+def null_tf_idf(directory):
+    L = name_files(directory)
+    M = []
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] == 0:
+                M.append(item[0])
+    return M
 
 
-def high_tf_idf():
-    return L
+
+def high_tf_idf(directory):
+    L = name_files(directory)
+    M = []
+    max = 0
+
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] > max:
+                max = item[1]
+
+        for item in dico.items():
+            if item[1] == max :
+                M.append(item[0])
+
+    return M
 
 def chirac():
-    return mot
+    print("")
+
 
 def nation():
-    return
+    print("")
+
