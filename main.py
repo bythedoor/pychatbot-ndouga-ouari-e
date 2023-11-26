@@ -2,7 +2,7 @@
 
 from functions import *
 
-
+"""
 def main():  # Fonction principale, execute le programme entier
 
     # Affichage menu
@@ -34,15 +34,13 @@ def main():  # Fonction principale, execute le programme entier
     elif n == 6:
         print("0")
 
-
+"""
 
 
 if __name__ == "__main__":
-    main() # on execute la fonction principale
+    # main() # on execute la fonction principale
 
     # tests des fonctions
-    """
-    n = "speeches"
-    print(list_last_names(n))
-    print(presidents(n))
-    """
+
+
+
