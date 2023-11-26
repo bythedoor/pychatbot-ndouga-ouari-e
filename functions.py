@@ -131,33 +131,6 @@ def tf(text, directory):
 
     return d_tf
 
-"""
-Cette fonction calcule le score tf-idf de chaque mot
-"""
-"""
-def matrix_tf_idf(directory):
-
-    l_tf = []
-
-    d_idf = idf(directory)
-
-    for doc in os.listdir(directory):
-        if doc.endswith(".txt"):
-            with open(os.path.join(directory, doc), "r") as f:
-
-                d_tf = tf(doc, directory)
-
-                l_tf.append(d_tf)
-                    # tf_idf[mot] = d_tf[mot] * d_idf[mot]
-    l_word = set([])
-    for stf in l_tf:
-        for word in stf:
-            l_word.append(word)
-
-
-    return tf_idf, l_tf, l_word
-
-"""
 
 
 """
@@ -255,8 +228,31 @@ def null_tf_idf():
 def high_tf_idf():
     return L
 
-def chirac():
-    return mot
+def chirac(directory):
+    # variable qui contiendra le/les mots les plus répété(s)
+    mot_plus_repete = ""
+    # Variable qui stoquera l'occurence du/des mots le/les plus utilisé(s)
+    occ = 0
+
+    # Boucle qui parcours les documents dans lesquel le mot "Chirac" apparait
+    for doc in os.listdir(directory):
+        if doc.endswith(".txt") and "Chirac" in doc:
+            with open(os.path.join(directory, doc), "r") as f:
+                # appel du dicyionnaire TF du document en question (doc)
+                d_tf = tf(doc, directory)
+
+                # Bouble qui parcours le dictionnaire TF et qui compare les valeurs des occurences
+                for word, count in d_tf.items():
+                    if count > occ:
+                        occ = count
+                        mot_plus_repete = word
+                    elif count == occ:
+                        mot_plus_repete += ", " + word
+
+    # Création de la phrase réponse
+    phrase = "Le(s) mot(s) le(s) plus répété(s) est/sont '" + mot_plus_repete + "'"
+
+    return phrase
 
 def nation():
     return
