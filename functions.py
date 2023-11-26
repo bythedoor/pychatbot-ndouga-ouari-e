@@ -248,16 +248,20 @@ def matrix_tf_idf(directory):
 """
 Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
-def null_tf_idf():
+def null_tf_idf(directory):
     L = name_files(directory)
     M = []
     for i in L:
         dico = (score_tf_idf(i, directory))
         for item in dico.items():
             if item[1] == 0:
+                M.append(item[0])
+    return M
 
-
-def high_tf_idf():
+"""
+Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
+"""
+def high_tf_idf(directory):
     L = name_files(directory)
     M = []
     max = 0
@@ -301,4 +305,5 @@ def chirac(directory):
     return phrase
 
 def nation():
+
     return
