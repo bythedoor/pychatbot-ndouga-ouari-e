@@ -109,7 +109,7 @@ def punctuation(text, clean_text):
                     #if not (ord(i) >=32) and not (ord(i) <= 47):
                     f2.write(i)
 
-    return #(cleane_text)
+    return #cleane_text
 
 """
 Cette fonction calcule l'occurence de chaque mot et les stoques dans un dictionnaire 
@@ -133,3 +133,41 @@ def tf(text):
                 d_tf[mot] = d_tf.get(mot, 0) +1
 
     return d_tf
+
+
+"""
+Cette fonction calcule le score IDF de chaque mot du text
+"""
+import math
+def idf(directory):
+
+    # dictionnaire qui aura pour clé chaque mot et pour valeur leur score idf
+    d_idf = {}
+    #  dictionnaire qui aura pour clé chaque mot et pour valeur le nombre de document dans lequel il apparait
+    d_mot_par_doc = {}
+    # variable indiquant le nombre de document
+    nb_doc = 0
+
+    # Boucle qui parcours chaque fichier texte dans le dossier donné (directory)
+    for doc in os.listdir(directory):
+        if doc.endswith(".txt"):
+            with open(os.path.join(directory, doc), "r") as f:
+                # stocker le contenu de chaque texte en chaine de caractère
+                contenu = f.read()
+                # séparation des mots
+                words = contenu.split()
+
+                for mot in words:
+                    # Incrémentation du dictionnaire à l'apparition d'un mot
+                    d_mot_par_doc[mot] = d_mot_par_doc.get(mot, 0) + 1
+
+                # Incrémentation du nombre de document
+                nb_doc += 1
+    # boucle parcourant le dictionnaire d_mot_par_doc et calculant l'idf de chaque mot
+    for mot, compteur in d_mot_par_doc.items():
+        d_idf[mot] = math.log((nb_doc/compteur)+1)
+
+    return d_idf
+
+
+
