@@ -15,3 +15,6 @@ Pour utiliser l'une d'elle, il faut écrire le numéro correspondant dans la lig
 au lieu de "Giscard d'Estaing"
 * La fonction input() ne s'affiche pas dans la fonction principale de main.py
 * La fonction matrix_tf_idf() met beaucoup de temps à s'exécuter
+* La fonction nation() ne trouve pas les fichiers à étudier
+* Les fonctions ecology() et common_words() ne sont pas complètement opérationnelles :(
+* Les commandes 4 à 6 ne fonctionnent pas correctement

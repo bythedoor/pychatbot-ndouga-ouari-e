@@ -305,5 +305,32 @@ def chirac(directory):
     return phrase
 
 def nation():
+    L = name_files("speeches")
+    M = []
 
-    return
+    cpt = 0
+    for i in L:
+        with open(i, "r") as f1:
+            for ligne in f1:
+                if "nation" in ligne:
+                    cpt += 1
+            f1.close()
+        if cpt > 0:
+            M.append(i)
+
+    return M
+
+def ecology(directory):
+    L = name_files(directory)
+    M = []
+    eco = True
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[0] == "ecologie" and eco:
+                M.append(i)
+    return M
+
+
+def common_words():
+    print("????")
