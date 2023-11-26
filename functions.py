@@ -249,13 +249,30 @@ def matrix_tf_idf(directory):
 Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
 def null_tf_idf():
-    print(idf("speeches"))
+    L = name_files(directory)
+    M = []
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] == 0:
 
 
 def high_tf_idf():
-    return L
+    L = name_files(directory)
+    M = []
+    max = 0
 
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] > max:
+                max = item[1]
 
+        for item in dico.items():
+            if item[1] == max:
+                M.append(item[0])
+
+    return M
 
 def chirac(directory):
     # variable qui contiendra le/les mots les plus répété(s)
