@@ -111,10 +111,10 @@ def punctuation(text, clean_text):
 """
 Cette fonction calcule l'occurence de chaque mot et les stockes dans un dictionnaire 
 """
-def tf(text):
+def tf(text, directory):
     #text = punctuation(texte)
 
-    with open(text, "r") as f1:
+    with open(os.path.join(directory,text), "r") as f1:
 
         d_tf = {}  #dictionnaire tf
 
@@ -134,7 +134,7 @@ def tf(text):
 """
 Cette fonction calcule le score tf-idf de chaque mot
 """
-
+"""
 def matrix_tf_idf(directory):
 
     l_tf = []
@@ -145,7 +145,7 @@ def matrix_tf_idf(directory):
         if doc.endswith(".txt"):
             with open(os.path.join(directory, doc), "r") as f:
 
-                d_tf = tf(doc)
+                d_tf = tf(doc, directory)
 
                 l_tf.append(d_tf)
                     # tf_idf[mot] = d_tf[mot] * d_idf[mot]
@@ -157,7 +157,7 @@ def matrix_tf_idf(directory):
 
     return tf_idf, l_tf, l_word
 
-
+"""
 
 
 """
@@ -204,7 +204,7 @@ def score_tf_idf(text, directory):
     # appel du dictionnaire IDF
     d_idf = idf(directory)
     # appel du dictionnaire TF du document en question
-    d_tf = tf(text)
+    d_tf = tf(text, directory)
 
     # Boucle qui Incrémente le dictionnaire avec les scores TF-IDF en faisant TF * IDF
     for word, count in d_tf.items():
@@ -213,8 +213,35 @@ def score_tf_idf(text, directory):
     return d_tf_idf
 
 
+"""
+Cette fonction renvoie la matrice TF-IDF
+"""
 
+def matrix_tf_idf(directory):
+    # Création de la matrice contenant par ligne le score TF-IDF d'un mot dans chaqu'un des textes, une colonne représente un fichier texte
+    matrix_tf_idf = []
+    # appel du dictionnaire IDF
+    d_idf = idf(directory)
 
+    # Boucle parcourant chaque mot (clé) dans le dictionnaire idf
+    for word in d_idf.keys():
+        # Création d'une liste correspondant au score TF-IDF d'un même mots dans chaque document
+        l_mot_par_doc = []
+        # Boucle parcourant chaque document
+        for doc in os.listdir(directory):
+            # appel du dictionnaire donnant le score IDF de chaque d'un document
+            d_tf_idf = score_tf_idf(doc, directory)
+
+            # Incrémentation de la ligne avec le score TF-IDF du mot s'il se trouve dans le document (doc)
+            if word in d_tf_idf.keys():
+                l_mot_par_doc.append(d_tf_idf[word])
+            else: # sinon donner une valeur de 0
+                l_mot_par_doc.append(0)
+
+        # Ajout de chaque ligne (liste) dans la matrice
+        matrix_tf_idf.append(l_mot_par_doc)
+
+    return matrix_tf_idf
 
 
 
@@ -223,6 +250,7 @@ Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
 def null_tf_idf():
     print(idf("speeches"))
+
 
 def high_tf_idf():
     return L
