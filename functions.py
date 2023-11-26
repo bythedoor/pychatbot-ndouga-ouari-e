@@ -73,27 +73,46 @@ def print_names(directory):
 """
 Cette fonction renvoie un fichier en minuscules
 """
+def lowercase(directory):
 
+    # Créer le répertoire "cleaned" s'il n'existe pas
+    cleaned_directory = os.path.join(os.getcwd(), "cleaned")
+    if not os.path.exists(cleaned_directory):
+        os.makedirs(cleaned_directory)
 
-def lowercase(text, clean_text):
-    with open(text, "r") as f1, open(clean_text, "w") as f2:
-        for ligne in f1:
-            for i in ligne:
-                if ord(i) >= 65 and ord(i) <= 90:  # Convertit les majuscules en minuscules
-                    f2.write(chr(ord(i)+32))
-                elif i == "\n":
-                    f2.write("\n")
-                else:
-                    f2.write(i)
+    l_files = list_of_files(directory, '.txt')
+    l_nom = list_last_names(directory)
 
-    return clean_text
+    for doc in os.listdir(directory):
+        if doc.endswith(".txt"):
+            p_nom = ""
+            for nom in l_nom:
+                if nom in doc:
+                    p_nom = nom
 
+            #clean_text = os.rename(doc, 'clean_'+p_nom)
+            input = os.path.join(directory,doc)
+            output = os.path.join(cleaned_directory, doc.replace(".txt", "_clean.txt"))
+
+            with open(input, "r") as f1, open(output, "w") as f2:
+
+                for ligne in f1:
+                    for i in ligne:
+                        if ord(i) >= 65 and ord(i) <= 90:  # Convertit les majuscules en minuscules
+                            f2.write(chr(ord(i)+32))
+                        elif i == "\n":
+                            f2.write("\n")
+                        else:
+                            f2.write(i)
+        #n_nom = 'clean_'+p_nom+'.txt'
+        #os.rename(os.path.join(cleaned_directory, doc), os.path.join(cleaned_directory, n_nom))
+    return #clean_text
 
 """
 Cette fonction renvoie un fichier sans ponctuation
 """
 
-def punctuation(text, clean_text):
+def punctuation(directory):
     # clean_text = lowercase(text, 'clean_text.txt')
     with open(text, "r") as f1, open(clean_text, "w") as f2:
         for ligne in f1:
@@ -133,30 +152,6 @@ def tf(text, directory):
 
 """
 Cette fonction calcule le score tf-idf de chaque mot
-"""
-"""
-def matrix_tf_idf(directory):
-
-    l_tf = []
-
-    d_idf = idf(directory)
-
-    for doc in os.listdir(directory):
-        if doc.endswith(".txt"):
-            with open(os.path.join(directory, doc), "r") as f:
-
-                d_tf = tf(doc, directory)
-
-                l_tf.append(d_tf)
-                    # tf_idf[mot] = d_tf[mot] * d_idf[mot]
-    l_word = set([])
-    for stf in l_tf:
-        for word in stf:
-            l_word.append(word)
-
-
-    return tf_idf, l_tf, l_word
-
 """
 
 
