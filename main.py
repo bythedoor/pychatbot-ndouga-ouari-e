@@ -4,15 +4,45 @@ from functions import *
 
 
 def main():  # Fonction principale, execute le programme entier
-    return
+
+    # Affichage menu
+    print("************** BIENVENUE DANS CHATBOT ! **************")
+    print("\n** Menu principal - Veuillez choisir une option en tapant le numéro correspondant : \n")
+    print("1 - Liste des mots les moins importants")
+    print("2 - Liste des mots les plus importants")
+    print("3 - Les mots les plus répétés par Chirac")
+    print("4 - Liste des présidents mentionant le mot 'Nation', et celui qui le dit plus souvent")
+    print("5 - Le premier président à parler d'écologie ou du climat")
+    print("6 - Liste des mots que tous les présidents ont mentionné")
+
+    # L'utilisateur choisit une des fonctionnalités, numérotées de 1 à 6
+    n = 0
+    while n < 0 or n > 6:
+        n = int(input("Choississez un nombre >> "))
+
+    # Un programme s'exécute en fonction de la fonctionnalité choisie
+    if n == 1:  # remplacer print("0") par fonctions
+        print("0")
+    elif n == 2:
+        print("0")
+    elif n == 3:
+        print("0")
+    elif n == 4:
+        print("0")
+    elif n == 5:
+        print("0")
+    elif n == 6:
+        print("0")
+
+
 
 
 if __name__ == "__main__":
-    names = name_files("speeches")
-    #print_names(names)
-    # main() - on execute la fonction principale
+    main() # on execute la fonction principale
 
-    print(lowercase('speeches/Nomination_Chirac1.txt', 'cleaned/clean_text.txt'))
-    #print(punctuation('speeches/Nomination_Chirac1.txt'))
-    print(punctuation('cleaned/clean_text.txt', 'cleaned/clean_text2.txt'))
-    print(tf('cleaned/clean_text2.txt'))
+    # tests des fonctions
+    """
+    n = "speeches"
+    print(list_last_names(n))
+    print(presidents(n))
+    """

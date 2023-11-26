@@ -27,20 +27,17 @@ Cette fonction renvoie la liste des noms de familles des présidents
 """
 
 
-def list_last_names(directory):  # Fonction pas complètement opératoire, à finaliser
+def list_last_names(directory):
     L = name_files(directory)
     last_names = []
     for i in L:
         if i[-5] == '1' or i[-5] == '2':
             val = i[11:-5]
-            last_names.append(val)
         else:
             val = i[11:-4]
+        if val not in last_names:
             last_names.append(val)
 
-    """for l in last_names:
-        if last_names.count(l) >= 2:
-                last_names.remove(l)"""
     return last_names
 
 
@@ -112,7 +109,7 @@ def punctuation(text, clean_text):
     return #cleane_text
 
 """
-Cette fonction calcule l'occurence de chaque mot et les stoques dans un dictionnaire 
+Cette fonction calcule l'occurence de chaque mot et les stockes dans un dictionnaire 
 """
 def tf(text):
     #text = punctuation(texte)
