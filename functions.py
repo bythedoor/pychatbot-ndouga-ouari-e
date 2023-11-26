@@ -75,18 +75,42 @@ Cette fonction renvoie un fichier en minuscules
 """
 
 
-def lowercase(text, clean_text):
-    with open(text, "r") as f1, open(clean_text, "w") as f2:
-        for ligne in f1:
-            for i in ligne:
-                if ord(i) >= 65 and ord(i) <= 90:  # Convertit les majuscules en minuscules
-                    f2.write(chr(ord(i)+32))
-                elif i == "\n":
-                    f2.write("\n")
-                else:
-                    f2.write(i)
+def lowercase(directory):
 
-    return clean_text
+    # Créer le répertoire "cleaned" s'il n'existe pas
+    cleaned_directory = os.path.join(os.getcwd(), "cleaned")
+    if not os.path.exists(cleaned_directory):
+        os.makedirs(cleaned_directory)
+
+    l_files = list_of_files(directory, '.txt')
+    l_nom = list_last_names(directory)
+
+    for doc in os.listdir(directory):
+        if doc.endswith(".txt"):
+            p_nom = ""
+            for nom in l_nom:
+                if nom in doc:
+                    p_nom = nom
+
+            #clean_text = os.rename(doc, 'clean_'+p_nom)
+            input = os.path.join(directory,doc)
+            output = os.path.join(cleaned_directory, doc)
+
+
+
+            with open(input, "r") as f1, open(output, "w") as f2:
+                for ligne in f1:
+                    for i in ligne:
+                        if ord(i) >= 65 and ord(i) <= 90:  # Convertit les majuscules en minuscules
+                            f2.write(chr(ord(i)+32))
+                        elif i == "\n":
+                            f2.write("\n")
+                        else:
+                            f2.write(i)
+                #n_nom = 'clean_'+p_nom+'.txt'
+                #os.rename(doc, n_nom)
+
+    return #clean_text
 
 
 """
@@ -103,7 +127,7 @@ def punctuation(text, clean_text):
                 elif ord(i) == 39 or ord(i) == 45:
                     f2.write(chr(32))
                 else:
-                    #if not (ord(i) >=32) and not (ord(i) <= 47):
+
                     f2.write(i)
 
     return #cleane_text
@@ -130,34 +154,6 @@ def tf(text, directory):
                 d_tf[mot] = d_tf.get(mot, 0) +1
 
     return d_tf
-
-"""
-Cette fonction calcule le score tf-idf de chaque mot
-"""
-"""
-def matrix_tf_idf(directory):
-
-    l_tf = []
-
-    d_idf = idf(directory)
-
-    for doc in os.listdir(directory):
-        if doc.endswith(".txt"):
-            with open(os.path.join(directory, doc), "r") as f:
-
-                d_tf = tf(doc, directory)
-
-                l_tf.append(d_tf)
-                    # tf_idf[mot] = d_tf[mot] * d_idf[mot]
-    l_word = set([])
-    for stf in l_tf:
-        for word in stf:
-            l_word.append(word)
-
-
-    return tf_idf, l_tf, l_word
-
-"""
 
 
 """
@@ -248,12 +244,30 @@ def matrix_tf_idf(directory):
 """
 Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
-def null_tf_idf():
-    print(idf("speeches"))
+def null_tf_idf(directory):
+    L = name_files(directory)
+    M = []
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] == 0:
+                M.append(item[0])
+    return M
 
 
-def high_tf_idf():
-    return L
+def high_tf_idf(directory):
+    L = name_files(directory)
+    M = []
+    max = 0
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] > max:
+                max = item[1]
+        for item in dico.items():
+            if item[1] == max :
+                M.append(item[0])
+    return M
 
 
 
@@ -284,4 +298,7 @@ def chirac(directory):
     return phrase
 
 def nation():
+    nom_president = ""
+
+
     return
