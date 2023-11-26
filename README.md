@@ -9,5 +9,5 @@ Projet Python L1
 ### Modules à installer : Aucun
 
 ## Bugs
-* La fonction list_last_names() renvoie le nom de familles 
-des présidens en doublons
+* La fonction list_last_names() renvoie le nom de famille 
+des présidents en doublons
