@@ -22,11 +22,20 @@ def main():  # Fonction principale, execute le programme entier
 
     # Un programme s'exécute en fonction de la fonctionnalité choisie
     if n == 1:  # remplacer print("0") par fonctions
-        print("0")
+        p = null_tf_idf("speeches")
+        if len(p) == 0:
+            print("Il n'y a pas de mots au score TF-IDF nul")
+        else:
+            print("Les mots non importants sont: ")
+            for i in range(len(p)):
+                print(p[i], end=" ")
     elif n == 2:
-        print("0")
+        p = high_tf_idf(("speeches"))
+        print("Les mots importants sont: ")
+        for i in range(len(p)):
+            print(p[i], end=" ")
     elif n == 3:
-        print("0")
+        print(chirac("speeches"))
     elif n == 4:
         print("0")
     elif n == 5:
@@ -45,4 +54,18 @@ if __name__ == "__main__":
     n = "speeches"
     print(list_last_names(n))
     print(presidents(n))
+    """
+    """
+    print(score_tf_idf('Nomination_Chirac1.txt', 'speeches'))
+    # print(null_tf_idf())#))
+    # print(idf('speeches'))
+    # print(matrix_tf_idf('speeches'))
+    # print(tf('Nomination_Chirac1.txt', 'speeches'))
+    print(chirac('speeches'))
+    # print(print_names('speeches'))
+    print(presidents('speeches'))
+    print(list_last_names('speeches'))
+    print(list_of_files('speeches', '.txt'))
+    print(lowercase('speeches'))
+    print(punctuation('Nomination_Chirac1.txt', 'cleaned/clean_Chirac.txt'))
     """

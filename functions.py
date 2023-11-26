@@ -104,6 +104,7 @@ def lowercase(directory):
                             f2.write("\n")
                         else:
                             f2.write(i)
+                punctuation(f1,f2)
         #n_nom = 'clean_'+p_nom+'.txt'
         #os.rename(os.path.join(cleaned_directory, doc), os.path.join(cleaned_directory, n_nom))
     return #clean_text
@@ -112,9 +113,10 @@ def lowercase(directory):
 Cette fonction renvoie un fichier sans ponctuation
 """
 
-def punctuation(directory):
+def punctuation(text, clean_text):
     # clean_text = lowercase(text, 'clean_text.txt')
     with open(text, "r") as f1, open(clean_text, "w") as f2:
+
         for ligne in f1:
             for i in ligne:
                 if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
@@ -243,12 +245,35 @@ def matrix_tf_idf(directory):
 """
 Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
-def null_tf_idf():
-    print(idf("speeches"))
+
+def null_tf_idf(directory):
+    L = name_files(directory)
+    M = []
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] == 0:
+                M.append(item[0])
+    return M
 
 
-def high_tf_idf():
-    return L
+"""
+Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
+"""
+
+def high_tf_idf(directory):
+    L = name_files(directory)
+    M = []
+    max = 0
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[1] > max:
+                max = item[1]
+        for item in dico.items():
+            if item[1] == max :
+                M.append(item[0])
+    return M
 
 
 
@@ -279,4 +304,28 @@ def chirac(directory):
     return phrase
 
 def nation():
-    return
+    L = name_files("speeches")
+    M = []
+
+    cpt = 0
+    for i in L:
+        with open(i,"r") as f1:
+            for ligne in f1:
+                if "nation" in ligne:
+                    cpt += 1
+            f1.close()
+            if cpt>0:
+                M.append(i)
+    return M
+
+
+def ecology(directory):
+    L = name_files(directory)
+    M = []
+    eco = True
+    for i in L:
+        dico = (score_tf_idf(i, directory))
+        for item in dico.items():
+            if item[0] == "ecologie" and eco:
+                M.append(i)
+    return M
