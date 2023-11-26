@@ -166,5 +166,17 @@ def idf(directory):
 
     return d_idf
 
+"""
+Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
+"""
+def null_tf_idf():
+    print(idf("speeches"))
 
+def high_tf_idf():
+    return L
 
+def chirac():
+    return mot
+
+def nation():
+    return
