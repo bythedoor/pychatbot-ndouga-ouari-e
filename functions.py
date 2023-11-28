@@ -265,7 +265,7 @@ Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
 
 def high_tf_idf(directory):
     L = name_files(directory)
-    M = []
+    M = set()
     max = 0
     for i in L:
         dico = (score_tf_idf(i, directory))
@@ -274,7 +274,7 @@ def high_tf_idf(directory):
                 max = item[1]
         for item in dico.items():
             if item[1] == max :
-                M.append(item[0])
+                M.add(item[0])
     return M
 
 
@@ -306,12 +306,12 @@ def chirac(directory):
     return phrase
 
 def nation():
-    L = name_files("speeches")
+    L = name_files("cleaned")
     M = []
 
     cpt = 0
     for i in L:
-        with open(i,"r") as f1:
+        with open(os.path.join("cleaned", i),"r") as f1:
             for ligne in f1:
                 if "nation" in ligne:
                     cpt += 1
