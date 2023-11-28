@@ -247,13 +247,15 @@ Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
 
 def null_tf_idf(directory):
-    L = name_files(directory)
+    # Initialisation des variables
+    dico = matrix_tf_idf(directory)
     M = []
-    for i in L:
-        dico = (score_tf_idf(i, directory))
-        for item in dico.items():
-            if item[1] == 0:
-                M.append(item[0])
+
+    # Pour chaque mot différent, on vérifie que le score TF-IDF est nul dans chaque fichier
+    for i in dico.items():
+        if i[1] == [0, 0, 0, 0, 0, 0, 0, 0]:
+            M.append(i[0])
+
     return M
 
 
@@ -283,7 +285,7 @@ def chirac(directory):
     # Variable qui stoquera l'occurence du/des mots le/les plus utilisé(s)
     occ = 0
 
-    # Boucle qui parcours les documents dans lesquel le mot "Chirac" apparait
+    # Boucle qui parcours les documents dans lesquels le mot "Chirac" apparait
     for doc in os.listdir(directory):
         if doc.endswith(".txt") and "Chirac" in doc:
             with open(os.path.join(directory, doc), "r") as f:
