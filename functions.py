@@ -110,24 +110,29 @@ def lowercase(directory):
     return #clean_text
 
 """
-Cette fonction renvoie un fichier sans ponctuation
+Cette fonction transforme tous les fichiers d'un repertoire sans ponctuation
 """
 
-def punctuation(text, clean_text):
+def punctuation(directory):
     # clean_text = lowercase(text, 'clean_text.txt')
-    with open(text, "r") as f1, open(clean_text, "w") as f2:
+    t_clean = ""
+    for text in os.listdir(directory):
+        if text.endswith(".txt"):
+            with open(os.path.join(directory, text), "r") as f1:
+                for ligne in f1:
+                    for i in ligne:
+                        if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
+                            t_clean += ''
+                        elif ord(i) == 39 or ord(i) == 45:
+                            t_clean += chr(32)
+                        else:
+                            #if not (ord(i) >=32) and not (ord(i) <= 47):
+                            t_clean += i
 
-        for ligne in f1:
-            for i in ligne:
-                if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
-                    f2.write('')
-                elif ord(i) == 39 or ord(i) == 45:
-                    f2.write(chr(32))
-                else:
-                    #if not (ord(i) >=32) and not (ord(i) <= 47):
-                    f2.write(i)
+            with open(os.path.join(directory,text), 'w') as f2:
+                f2.write(t_clean)
 
-    return #cleane_text
+    return
 
 """
 Cette fonction calcule l'occurence de chaque mot et les stockes dans un dictionnaire 
@@ -184,9 +189,9 @@ def idf(directory):
                 nb_doc += 1
     # boucle parcourant le dictionnaire d_mot_par_doc et calculant l'idf de chaque mot
     for mot, compteur in d_mot_par_doc.items():
-        d_idf[mot] = math.log((nb_doc/compteur)+1)
+        d_idf[mot] = math.log10((nb_doc/compteur))
 
-    return d_idf
+    return d_idf, d_mot_par_doc
 
 """
 Cette fonction calcule le score TF-IDF de chaque mot d'un text
