@@ -110,24 +110,29 @@ def lowercase(directory):
     return #clean_text
 
 """
-Cette fonction renvoie un fichier sans ponctuation
+Cette fonction transforme tous les fichiers d'un repertoire sans ponctuation
 """
 
-def punctuation(text, clean_text):
+def punctuation(directory):
     # clean_text = lowercase(text, 'clean_text.txt')
-    with open(text, "r") as f1, open(clean_text, "w") as f2:
+    t_clean = ""
+    for text in os.listdir(directory):
+        if text.endswith(".txt"):
+            with open(os.path.join(directory, text), "r") as f1:
+                for ligne in f1:
+                    for i in ligne:
+                        if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
+                            t_clean += ''
+                        elif ord(i) == 39 or ord(i) == 45:
+                            t_clean += chr(32)
+                        else:
+                            #if not (ord(i) >=32) and not (ord(i) <= 47):
+                            t_clean += i
 
-        for ligne in f1:
-            for i in ligne:
-                if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
-                    f2.write('')
-                elif ord(i) == 39 or ord(i) == 45:
-                    f2.write(chr(32))
-                else:
-                    #if not (ord(i) >=32) and not (ord(i) <= 47):
-                    f2.write(i)
+            with open(os.path.join(directory,text), 'w') as f2:
+                f2.write(t_clean)
 
-    return #cleane_text
+    return
 
 """
 Cette fonction calcule l'occurence de chaque mot et les stockes dans un dictionnaire 
@@ -152,9 +157,6 @@ def tf(text, directory):
 
     return d_tf
 
-"""
-Cette fonction calcule le score tf-idf de chaque mot
-"""
 
 
 """
@@ -187,28 +189,59 @@ def idf(directory):
                 nb_doc += 1
     # boucle parcourant le dictionnaire d_mot_par_doc et calculant l'idf de chaque mot
     for mot, compteur in d_mot_par_doc.items():
-        d_idf[mot] = math.log((nb_doc/compteur)+1)
+        d_idf[mot] = math.log10((nb_doc/compteur))
 
-    return d_idf
+    return d_idf, d_mot_par_doc
 
 """
-Cette fonction calcule le score TF-IDF de chaque mot du text
+Cette fonction calcule le score TF-IDF de chaque mot d'un text
 """
-
-def score_tf_idf(text, directory):
+def score_tf_idf_text(text, directory):
     # dictionnaire qui stoquera les score tf-idf de chaque mot d'un document
-    d_tf_idf = {}
+    d_tf_idf_text = {}
     # appel du dictionnaire IDF
     d_idf = idf(directory)
     # appel du dictionnaire TF du document en question
     d_tf = tf(text, directory)
-
     # Boucle qui Incrémente le dictionnaire avec les scores TF-IDF en faisant TF * IDF
     for word, count in d_tf.items():
-        d_tf_idf[word] = count * d_idf[word]
+        if word not in d_tf_idf_text:
+            d_tf_idf_text[word] = count * d_idf.get(word, 0)
+        """
+        else:
+            d_tf_idf_text[word] += count * d_idf.get(word, 0)
+        """
+    return d_tf_idf_text
+
+
+
+"""
+Cette fonction calcule le score TF-IDF de chaque mot du repertoire
+"""
+"""
+def score_tf_idf(directory):
+
+    # dictionnaire qui stoquera les score tf-idf de chaque mot d'un document
+    d_tf_idf = {}
+    # appel du dictionnaire IDF
+    d_idf = idf(directory)
+
+    for doc in os.listdir(directory):
+        if doc.endswith(".txt"):
+            #with open(os.path.join(directory, doc), "r") as f:
+
+            # appel du dictionnaire TF du document en question
+            d_tf = tf(doc, directory)
+
+            # Boucle qui Incrémente le dictionnaire avec les scores TF-IDF en faisant TF * IDF
+            for word, count in d_tf.items():
+                if word not in d_tf_idf:
+                    d_tf_idf[word] = count * d_idf.get(word, 0)
+                else:
+                    d_tf_idf[word] += count * d_idf.get(word, 0)
 
     return d_tf_idf
-
+"""
 
 """
 Cette fonction renvoie la matrice TF-IDF
@@ -216,9 +249,11 @@ Cette fonction renvoie la matrice TF-IDF
 
 def matrix_tf_idf(directory):
     # Création de la matrice contenant par ligne le score TF-IDF d'un mot dans chaqu'un des textes, une colonne représente un fichier texte
-    matrix_tf_idf = []
+    matrix_tf_idf = {}
     # appel du dictionnaire IDF
     d_idf = idf(directory)
+    # appel du dictionnaire donnant le score TF-IDF de chaque mot
+    #d_tf_idf = score_tf_idf(directory)
 
     # Boucle parcourant chaque mot (clé) dans le dictionnaire idf
     for word in d_idf.keys():
@@ -226,17 +261,23 @@ def matrix_tf_idf(directory):
         l_mot_par_doc = []
         # Boucle parcourant chaque document
         for doc in os.listdir(directory):
-            # appel du dictionnaire donnant le score IDF de chaque d'un document
-            d_tf_idf = score_tf_idf(doc, directory)
 
-            # Incrémentation de la ligne avec le score TF-IDF du mot s'il se trouve dans le document (doc)
-            if word in d_tf_idf.keys():
-                l_mot_par_doc.append(d_tf_idf[word])
-            else: # sinon donner une valeur de 0
-                l_mot_par_doc.append(0)
+            if doc.endswith(".txt"):
+                #with open(os.path.join(directory, doc), "r") as f:
+                    #chaine = f.read()
+
+                #d_tf = tf(doc, directory)
+
+                d_tf_idf_text = score_tf_idf_text(doc, directory)
+                # Incrémentation de la ligne avec le score TF-IDF du mot s'il se trouve dans le document (doc)
+                if word in d_tf_idf_text:
+                    l_mot_par_doc.append(d_tf_idf_text[word])
+                else: # sinon donner une valeur de 0
+                    l_mot_par_doc.append(0)
+
 
         # Ajout de chaque ligne (liste) dans la matrice
-        matrix_tf_idf.append(l_mot_par_doc)
+        matrix_tf_idf[word] = l_mot_par_doc
 
     return matrix_tf_idf
 
@@ -247,13 +288,13 @@ Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
 
 def null_tf_idf(directory):
-    L = name_files(directory)
+    #L = list_of_files(directory, '.txt')
+    matrice = matrix_tf_idf('cleaned')
     M = []
-    for i in L:
-        dico = (score_tf_idf(i, directory))
-        for item in dico.items():
-            if item[1] == 0:
-                M.append(item[0])
+
+    for key, value in matrice.items():
+        if value == 0.0:
+            M.append(key)
     return M
 
 
