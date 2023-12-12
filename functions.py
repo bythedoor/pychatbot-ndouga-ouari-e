@@ -355,7 +355,7 @@ def chirac(directory):
                         mot_plus_repete = word
                     elif count == occ:
                         mot_plus_repete += ", " + word
-    #j
+    #jf
     # Création de la phrase réponse
     phrase = "Le(s) mot(s) le(s) plus répété(s) est/sont '" + mot_plus_repete + "'"
 
