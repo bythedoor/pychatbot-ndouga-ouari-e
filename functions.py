@@ -104,7 +104,7 @@ def lowercase(directory):
                             f2.write("\n")
                         else:
                             f2.write(i)
-                #punctuation(f1,f2)
+                punctuation(f1,f2)
         #n_nom = 'clean_'+p_nom+'.txt'
         #os.rename(os.path.join(cleaned_directory, doc), os.path.join(cleaned_directory, n_nom))
     return #clean_text
@@ -115,12 +115,10 @@ Cette fonction transforme tous les fichiers d'un repertoire sans ponctuation
 
 def punctuation(directory):
     # clean_text = lowercase(text, 'clean_text.txt')
-
+    t_clean = ""
     for text in os.listdir(directory):
-
         if text.endswith(".txt"):
-            with open(os.path.join(directory, text), "r", encoding = 'UTF-8') as f1:
-                t_clean = ""
+            with open(os.path.join(directory, text), "r") as f1:
                 for ligne in f1:
                     for i in ligne:
                         if (ord(i) >32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
@@ -131,7 +129,7 @@ def punctuation(directory):
                             #if not (ord(i) >=32) and not (ord(i) <= 47):
                             t_clean += i
 
-            with open(os.path.join(directory,text), 'w', encoding = 'UTF-8') as f2:
+            with open(os.path.join(directory,text), 'w') as f2:
                 f2.write(t_clean)
 
     return
@@ -142,7 +140,7 @@ Cette fonction calcule l'occurence de chaque mot et les stockes dans un dictionn
 def tf(text, directory):
     #text = punctuation(texte)
 
-    with open(os.path.join(directory,text), "r", encoding = 'UTF-8') as f1:
+    with open(os.path.join(directory,text), "r") as f1:
 
         d_tf = {}  #dictionnaire tf
 
@@ -153,11 +151,10 @@ def tf(text, directory):
 
         # boucle parcourant la liste de mot
         for mot in mots:
-            if mot in d_tf:
+            if mot:
                 # Incrémentation du dictionnaire à chaque apparition de chaque mot
-                d_tf[mot] += 1
-            else:
-                d_tf[mot] = 1
+                d_tf[mot] = d_tf.get(mot, 0) +1
+
     return d_tf
 
 
@@ -177,41 +174,24 @@ def idf(directory):
 
     # Boucle qui parcours chaque fichier texte dans le dossier donné (directory)
     for doc in os.listdir(directory):
-        #d_tf = tf(doc, directory)
         if doc.endswith(".txt"):
-            with open(os.path.join(directory, doc), "r", encoding = 'UTF-8' ) as f:
+            with open(os.path.join(directory, doc), "r") as f:
                 # stocker le contenu de chaque texte en chaine de caractère
                 contenu = f.read()
                 # séparation des mots
                 words = contenu.split()
-                unique_words = set(words)
 
-
-                d_tf = tf(doc, directory)
-                #for mot in words:
-
-                #print(d_tf)
-
-                for mot in d_tf.keys():
-                    if mot in d_mot_par_doc.keys():
-                        d_mot_par_doc[mot] += 1
-                    else:
-                        d_mot_par_doc[mot] = 1
-
-
-                """
-                for mot in unique_words:
+                for mot in words:
                     # Incrémentation du dictionnaire à l'apparition d'un mot
                     d_mot_par_doc[mot] = d_mot_par_doc.get(mot, 0) + 1
-                """
-                #print(d_mot_par_doc)
+
                 # Incrémentation du nombre de document
                 nb_doc += 1
     # boucle parcourant le dictionnaire d_mot_par_doc et calculant l'idf de chaque mot
     for mot, compteur in d_mot_par_doc.items():
-        d_idf[mot] = math.log10(nb_doc/compteur)
+        d_idf[mot] = math.log10((nb_doc/compteur))
 
-    return  d_mot_par_doc, nb_doc , #d_idf,
+    return d_idf, d_mot_par_doc
 
 """
 Cette fonction calcule le score TF-IDF de chaque mot d'un text
@@ -225,16 +205,8 @@ def score_tf_idf_text(text, directory):
     d_tf = tf(text, directory)
     # Boucle qui Incrémente le dictionnaire avec les scores TF-IDF en faisant TF * IDF
     for word, count in d_tf.items():
-
-        if word not in d_tf_idf_text:
-                d_tf_idf_text[word] = count * d_idf[word]   # count * d_idf.get(word, 0)
-        """
         if word not in d_tf_idf_text:
             d_tf_idf_text[word] = count * d_idf.get(word, 0)
-        else:
-            d_tf_idf_text[word] += count * d_idf.get(word, 0)
-
-        """
         """
         else:
             d_tf_idf_text[word] += count * d_idf.get(word, 0)
@@ -298,7 +270,7 @@ def matrix_tf_idf(directory):
 
                 d_tf_idf_text = score_tf_idf_text(doc, directory)
                 # Incrémentation de la ligne avec le score TF-IDF du mot s'il se trouve dans le document (doc)
-                if word in d_tf_idf_text.keys():
+                if word in d_tf_idf_text:
                     l_mot_par_doc.append(d_tf_idf_text[word])
                 else: # sinon donner une valeur de 0
                     l_mot_par_doc.append(0)
@@ -318,17 +290,12 @@ Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 def null_tf_idf(directory):
     #L = list_of_files(directory, '.txt')
     matrice = matrix_tf_idf('cleaned')
-    mot_score_nul = []
+    M = []
 
-    for mot, scores in matrice.items():
-        nul = True
-        for score in scores:
-            if score != 0.0:
-                nul = False
-        if nul:
-            mot_score_nul.append(mot)
-
-    return mot_score_nul, len(mot_score_nul)
+    for key, value in matrice.items():
+        if value == 0.0:
+            M.append(key)
+    return M
 
 
 """
