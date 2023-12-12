@@ -324,7 +324,7 @@ def high_tf_idf(directory):
     M = []
     max = 0
     for i in L:
-        dico = (score_tf_idf(i, directory))
+        dico = (score_tf_idf_text(i, directory))
         for item in dico.items():
             if item[1] > max:
                 max = item[1]
@@ -361,18 +361,19 @@ def chirac(directory):
 
     return phrase
 
+
 def nation():
     L = name_files("speeches")
     M = []
 
     cpt = 0
     for i in L:
-        with open(i,"r") as f1:
+        with open(i, "r") as f1:
             for ligne in f1:
                 if "nation" in ligne:
                     cpt += 1
             f1.close()
-            if cpt>0:
+            if cpt > 0:
                 M.append(i)
     return M
 
@@ -382,8 +383,42 @@ def ecology(directory):
     M = []
     eco = True
     for i in L:
-        dico = (score_tf_idf(i, directory))
+        dico = (score_tf_idf_text(i, directory))
         for item in dico.items():
             if item[0] == "ecologie" and eco:
                 M.append(i)
     return M
+
+
+def token_question(question):
+    q_clean = ""
+    L = []  # Initialisation des variables
+
+    for i in question: # Cette boucle fait l'addition des caract
+
+        if ord(i) >= 65 and ord(i) <= 90: #
+            q_clean += (chr(ord(i) + 32))
+
+        elif (ord(i) > 32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
+            q_clean += ''
+
+        elif ord(i) == 39 or ord(i) == 45 or ord(i) == 63:
+            q_clean += chr(32)
+
+        else:
+            q_clean += i
+
+    L = q_clean.split()
+    return L
+
+
+def intersection(q_token, directory):
+    L = []
+    dico = matrix_tf_idf(directory)
+
+    for i in dico.keys():
+        if i in q_token:
+            L.append(i)
+
+    return L
+
