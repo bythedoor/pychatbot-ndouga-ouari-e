@@ -422,3 +422,4 @@ def intersection(q_token, directory):
 
     return L
 
+
