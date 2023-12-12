@@ -69,3 +69,13 @@ if __name__ == "__main__":
     print(lowercase('speeches'))
     print(punctuation('Nomination_Chirac1.txt', 'cleaned/clean_Chirac.txt'))
     """
+    #print(lowercase('speeches'))
+    #print(punctuation('cleaned'))
+    print(idf('cleaned'))
+
+    #for text in os.listdir('cleaned'):
+        #print(tf(text, 'cleaned'))
+
+    #print(tf('Nomination_Mitterrand2_clean.txt', 'cleaned'))
+    #print(null_tf_idf('cleaned'))
+    #print(matrix_tf_idf('cleaned'))
