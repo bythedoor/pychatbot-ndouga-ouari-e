@@ -288,13 +288,14 @@ Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
 
 def null_tf_idf(directory):
-    #L = list_of_files(directory, '.txt')
-    matrice = matrix_tf_idf('cleaned')
+    # Initialisation des variables
+    dico = matrix_tf_idf(directory)
     M = []
 
-    for key, value in matrice.items():
-        if value == 0.0:
-            M.append(key)
+    # Pour chaque mot différent, on vérifie que le score TF-IDF est nul dans chaque fichier
+    for i in dico.items():
+        if i[1] == [0, 0, 0, 0, 0, 0, 0, 0]:
+            M.append(i[0])
     return M
 
 
@@ -304,7 +305,7 @@ Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
 
 def high_tf_idf(directory):
     L = name_files(directory)
-    M = []
+    M = set()
     max = 0
     for i in L:
         dico = (score_tf_idf(i, directory))
@@ -313,7 +314,7 @@ def high_tf_idf(directory):
                 max = item[1]
         for item in dico.items():
             if item[1] == max :
-                M.append(item[0])
+                M.add(item[0])
     return M
 
 
@@ -324,7 +325,7 @@ def chirac(directory):
     # Variable qui stoquera l'occurence du/des mots le/les plus utilisé(s)
     occ = 0
 
-    # Boucle qui parcours les documents dans lesquel le mot "Chirac" apparait
+    # Boucle qui parcours les documents dans lesquels le mot "Chirac" apparait
     for doc in os.listdir(directory):
         if doc.endswith(".txt") and "Chirac" in doc:
             with open(os.path.join(directory, doc), "r") as f:
@@ -345,12 +346,12 @@ def chirac(directory):
     return phrase
 
 def nation():
-    L = name_files("speeches")
+    L = name_files("cleaned")
     M = []
 
     cpt = 0
     for i in L:
-        with open(i,"r") as f1:
+        with open(os.path.join("cleaned", i),"r") as f1:
             for ligne in f1:
                 if "nation" in ligne:
                     cpt += 1
