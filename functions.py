@@ -29,19 +29,12 @@ Cette fonction renvoie la liste des noms de familles des présidents
 
 def list_last_names(directory):
     L = name_files(directory)
-    # Si on recherche les nom des présidents dans le répertoire 'cleaned'
-    if directory == 'cleaned':
-        a = 11
-        b = 10
-    else: #Sinon dans le répertoire 'speeches'
-        a = 5
-        b = 4
     last_names = []
     for i in L:
-        if i[-a] == '1' or i[-a] == '2':
-            val = i[11:-a]
+        if i[-5] == '1' or i[-5] == '2':
+            val = i[11:-5]
         else:
-            val = i[11:-b]
+            val = i[11:-4]
         if val not in last_names:
             last_names.append(val)
 
@@ -59,11 +52,9 @@ def presidents(directory):
     list_presidents = {}
 
     cpt = 0
-    for i in range(len(first_names)):
-        prenom = first_names[i]
-        list_presidents[last_names[i]] = prenom
+    for i in first_names:
+        list_presidents[i] = last_names[cpt]
         cpt += 1
-
     return list_presidents
 
 
@@ -321,23 +312,16 @@ def null_tf_idf(directory):
         if nul:
             mot_score_nul.append(mot)
 
-    return mot_score_nul#, len(mot_score_nul)
+    return mot_score_nul, len(mot_score_nul)
 
 
 """
 Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
 """
-# Fonction intermédaire qui récupère le maximum d'une liste
-def max_list(L):
-
-    max = 0
-    for i in L:
-        if i > max:
-            max = i
-    return max
-
 
 def high_tf_idf(directory):
+    L = name_files(directory)
+    M = []
     max = 0
     l_mot = []
     matrice = matrix_tf_idf('cleaned')
@@ -362,8 +346,6 @@ def chirac(directory):
     # Variable qui stoquera l'occurence du/des mots le/les plus utilisé(s)
     occ = 0
 
-    mot_score_nul = null_tf_idf(('cleaned'))
-
     # Boucle qui parcours les documents dans lesquel le mot "Chirac" apparait
     for doc in os.listdir(directory):
         if doc.endswith(".txt") and "Chirac" in doc:
@@ -371,12 +353,12 @@ def chirac(directory):
                 # appel du dicyionnaire TF du document en question (doc)
                 d_tf = tf(doc, directory)
 
-                # Boucle qui parcours le dictionnaire TF et qui compare les valeurs des occurences
+                # Bouble qui parcours le dictionnaire TF et qui compare les valeurs des occurences
                 for word, count in d_tf.items():
-                    if count > occ and word not in mot_score_nul:
+                    if count > occ:
                         occ = count
                         mot_plus_repete = word
-                    elif count == occ and word not in mot_score_nul:
+                    elif count == occ:
                         mot_plus_repete += ", " + word
     #jf
     # Création de la phrase réponse
@@ -395,20 +377,6 @@ def mot_presidents(mot):
     for doc in list_doc:
 """
 
-
-
-
-"""
-Cette fonction renvoie les présidents qui ont parlé de nation
-"""
-def mot_dit(mot):
-    """
-    :param mot: str --> list """
-    corpus = name_files('cleaned')
-
-    matrix = matrix_tf_idf('cleaned')
-    l_president = []
-    nom = list_last_names("cleaned")
     cpt = 0
 
     for doc in corpus:
@@ -431,9 +399,7 @@ def mot_dit(mot):
         l_president[cpt] = "{1} {0}".format(nom, prenom)
         cpt += 1
 
-    return set(l_president)
 
-"""
 def ecology(directory):
     L = name_files(directory)
     M = []
@@ -444,4 +410,38 @@ def ecology(directory):
             if item[0] == "ecologie" and eco:
                 M.append(i)
     return M
-"""
+
+
+def token_question(question):
+    q_clean = ""
+    L = []  # Initialisation des variables
+
+    for i in question: # Cette boucle fait l'addition des caract
+
+        if ord(i) >= 65 and ord(i) <= 90: #
+            q_clean += (chr(ord(i) + 32))
+
+        elif (ord(i) > 32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
+            q_clean += ''
+
+        elif ord(i) == 39 or ord(i) == 45 or ord(i) == 63:
+            q_clean += chr(32)
+
+        else:
+            q_clean += i
+
+    L = q_clean.split()
+    return L
+
+
+def intersection(q_token, directory):
+    L = []
+    dico = matrix_tf_idf(directory)
+
+    for i in dico.keys():
+        if i in q_token:
+            L.append(i)
+
+    return L
+
+
