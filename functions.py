@@ -1,5 +1,5 @@
 import os
-
+import math
 
 """ 
 Cette fonction fait la même chose que list_of_files,
@@ -164,7 +164,7 @@ def tf(text, directory):
 """
 Cette fonction calcule le score IDF de chaque mot du text
 """
-import math
+
 def idf(directory):
 
     # dictionnaire qui aura pour clé chaque mot et pour valeur leur score idf
@@ -457,3 +457,19 @@ def tf_idf_token(q_token):
     return L
 
 
+
+def norme_vecteur(a):
+    s = 0
+
+    for i in a:
+        s += i**2
+
+    norme = math.sqrt(s)
+
+    return norme
+
+def similiarite(a, b):
+
+    score = scalaire(a,b)/(norme_vecteur(a) * norme_vecteur(b))
+
+    return score
