@@ -29,12 +29,19 @@ Cette fonction renvoie la liste des noms de familles des présidents
 
 def list_last_names(directory):
     L = name_files(directory)
+    # Si on recherche les nom des présidents dans le répertoire 'cleaned'
+    if directory == 'cleaned':
+        a = 11
+        b = 10
+    else: #Sinon dans le répertoire 'speeches'
+        a = 5
+        b = 4
     last_names = []
     for i in L:
-        if i[-5] == '1' or i[-5] == '2':
-            val = i[11:-5]
+        if i[-a] == '1' or i[-a] == '2':
+            val = i[11:-a]
         else:
-            val = i[11:-4]
+            val = i[11:-b]
         if val not in last_names:
             last_names.append(val)
 
@@ -52,9 +59,11 @@ def presidents(directory):
     list_presidents = {}
 
     cpt = 0
-    for i in first_names:
-        list_presidents[i] = last_names[cpt]
+    for i in range(len(first_names)):
+        prenom = first_names[i]
+        list_presidents[last_names[i]] = prenom
         cpt += 1
+
     return list_presidents
 
 
@@ -312,26 +321,38 @@ def null_tf_idf(directory):
         if nul:
             mot_score_nul.append(mot)
 
-    return mot_score_nul, len(mot_score_nul)
+    return mot_score_nul#, len(mot_score_nul)
 
 
 """
 Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
 """
+# Fonction intermédaire qui récupère le maximum d'une liste
+def max_list(L):
 
-def high_tf_idf(directory):
-    L = name_files(directory)
-    M = []
     max = 0
     for i in L:
-        dico = (score_tf_idf(i, directory))
-        for item in dico.items():
-            if item[1] > max:
-                max = item[1]
-        for item in dico.items():
-            if item[1] == max :
-                M.append(item[0])
-    return M
+        if i > max:
+            max = i
+    return max
+
+
+def high_tf_idf(directory):
+    max = 0
+    l_mot = []
+    matrice = matrix_tf_idf('cleaned')
+    for mot, scores in matrice.items():
+
+        maxi = max_list(scores)
+        if maxi > max:
+            max = maxi
+            l_mot = []
+            l_mot.append(mot)
+
+        elif maxi == max:
+            l_mot.append(mot)
+
+    return l_mot
 
 
 
@@ -341,6 +362,8 @@ def chirac(directory):
     # Variable qui stoquera l'occurence du/des mots le/les plus utilisé(s)
     occ = 0
 
+    mot_score_nul = null_tf_idf(('cleaned'))
+
     # Boucle qui parcours les documents dans lesquel le mot "Chirac" apparait
     for doc in os.listdir(directory):
         if doc.endswith(".txt") and "Chirac" in doc:
@@ -348,12 +371,12 @@ def chirac(directory):
                 # appel du dicyionnaire TF du document en question (doc)
                 d_tf = tf(doc, directory)
 
-                # Bouble qui parcours le dictionnaire TF et qui compare les valeurs des occurences
+                # Boucle qui parcours le dictionnaire TF et qui compare les valeurs des occurences
                 for word, count in d_tf.items():
-                    if count > occ:
+                    if count > occ and word not in mot_score_nul:
                         occ = count
                         mot_plus_repete = word
-                    elif count == occ:
+                    elif count == occ and word not in mot_score_nul:
                         mot_plus_repete += ", " + word
     #jf
     # Création de la phrase réponse
@@ -361,22 +384,56 @@ def chirac(directory):
 
     return phrase
 
-def nation():
-    L = name_files("speeches")
-    M = []
 
+"""
+Cette fonction renvoie la liste des présidents qui ont dis un même mot
+
+def mot_presidents(mot):
+    l_presidents = []
+    list_doc = os.listdir('cleaned')
+
+    for doc in list_doc:
+"""
+
+
+
+
+"""
+Cette fonction renvoie les présidents qui ont parlé de nation
+"""
+def mot_dit(mot):
+    """
+    :param mot: str --> list """
+    corpus = name_files('cleaned')
+
+    matrix = matrix_tf_idf('cleaned')
+    l_president = []
+    nom = list_last_names("cleaned")
     cpt = 0
-    for i in L:
-        with open(i,"r") as f1:
-            for ligne in f1:
-                if "nation" in ligne:
-                    cpt += 1
-            f1.close()
-            if cpt>0:
-                M.append(i)
-    return M
 
+    for doc in corpus:
+        if matrix[mot][cpt] != 0: # Si le mot est dit par un président (son tfidf est strictement différent 0)
+            if ( (cpt == 1 or cpt == 6) and (matrix[mot][cpt -1] == 0) ) or ( cpt != 1 and cpt != 6):
+                if cpt == 0 or cpt == 1:
+                    nom_p = nom[0]
+                elif cpt <= 5 and cpt >= 2 :
+                    nom_p = nom[cpt - 1]
+                elif cpt == 5 or cpt == 6:
+                    nom_p = nom[4]
+                else:
+                    nom_p = nom[5]
+                l_president.append(nom_p)
+        cpt += 1
+    d_presidents = presidents('cleaned')
+    cpt = 0
+    for nom in l_president: # On parcours la liste des présidents qui ont dis le mots et on ajoute leur prénom
+        prenom = d_presidents[nom]
+        l_president[cpt] = "{1} {0}".format(nom, prenom)
+        cpt += 1
 
+    return set(l_president)
+
+"""
 def ecology(directory):
     L = name_files(directory)
     M = []
@@ -387,3 +444,4 @@ def ecology(directory):
             if item[0] == "ecologie" and eco:
                 M.append(i)
     return M
+"""
