@@ -1,5 +1,5 @@
 import os
-
+import math
 
 """ 
 Cette fonction fait la même chose que list_of_files,
@@ -172,7 +172,7 @@ def tf(text, directory):
 """
 Cette fonction calcule le score IDF de chaque mot du text
 """
-import math
+
 def idf(directory):
 
     # dictionnaire qui aura pour clé chaque mot et pour valeur leur score idf
@@ -444,23 +444,23 @@ def ecology(directory):
 
 def token_question(question):
     q_clean = ""
-    L = []  # Initialisation des variables
 
-    for i in question: # Cette boucle fait l'addition des caract
+    # création du token de chaque mot de la question
+    for i in question:
 
-        if ord(i) >= 65 and ord(i) <= 90: #
+        # convertit les majuscules en minuscules
+        if ord(i) >= 65 and ord(i) <= 90:
             q_clean += (chr(ord(i) + 32))
 
-        elif (ord(i) > 32 and ord(i) <= 47) and (ord(i) != 39 and ord(i) != 45):
-            q_clean += ''
+        # convertit les caractères spéciaux en espace
+        elif (ord(i) > 32 and ord(i) <= 47) or (ord(i) >= 58 and ord(i) <= 64):
+            q_clean += ' '
 
-        elif ord(i) == 39 or ord(i) == 45 or ord(i) == 63:
-            q_clean += chr(32)
-
+        # si le caractère n'est ni une majuscule, ni un caractère spécial, on le garde dans le token
         else:
             q_clean += i
 
-    L = q_clean.split()
+    L = q_clean.split()  # sépare les différents mots de la question
     return L
 
 
@@ -468,10 +468,60 @@ def intersection(q_token, directory):
     L = []
     dico = matrix_tf_idf(directory)
 
+    # la boucle vérifie si chaque token de la question apparait dans le corpus
     for i in dico.keys():
+
+        # si le token est parmi les clés du dictionnaire tf-idf, on l'ajoute dans une liste
         if i in q_token:
             L.append(i)
+
+    # on renvoie la liste des mots de la question qui sont également dans le corpus
+    return L
+
+
+"""
+Calcule le score tf-idf de chaque mot d'une question
+"""
+
+
+def tf_idf_token(q_token):
+    L = []
+
+    # calcul du score tf d'un mot
+    for i in q_token:
+        cpt = 0
+
+        # cette boucle calcule le nombre d'occurences de chaque mot dans une question
+        for j in range(len(q_token)):
+            if i == q_token[j]:
+                cpt += 1
+        L.append(cpt)
+
+    dico = idf("cleaned")
+
+    # calcule le score tf-idf de chaque mot
+    for i in range(len(q_token)):
+
+        # si le mot est dans le corpus, on multiplie son score tf calculé précédemment par son score idf
+        if q_token[i] in dico.keys():
+            L[i] *= dico[q_token[i]]
 
     return L
 
 
+
+def norme_vecteur(a):
+    s = 0
+
+    for i in a:
+        s += i**2
+
+    norme = math.sqrt(s)
+
+    return norme
+
+def similiarite(a, b):
+
+    score = scalaire(a,b)/(norme_vecteur(a) * norme_vecteur(b))
+
+    return score
