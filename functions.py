@@ -509,19 +509,77 @@ def tf_idf_token(q_token):
     return L
 
 
+"""
+Cette fonction calcule le produit scalaire de 2 vecteurs a et b
+"""
+
+def scalaire(a,b):
+    somme = 0
+
+    for i in range(len(a)):
+        somme = a[i] * b[i]
+
+    return somme
+
+
+"""
+Cette fonction calcule la norme d'un vecteur
+"""
 
 def norme_vecteur(a):
     s = 0
 
+    # on fait la somme des carrés des coordonnées du vecteur
     for i in a:
         s += i**2
 
+    # on calcule la racine carrée de la somme des carrés
     norme = math.sqrt(s)
 
     return norme
 
+"""
+Cette fonction calcule le score de similarité de deux vecteurs a et b
+"""
 def similiarite(a, b):
 
     score = scalaire(a,b)/(norme_vecteur(a) * norme_vecteur(b))
 
     return score
+
+
+
+def pertinence(matrice, vecteur, nom_fichiers):
+    L = []
+
+    # on calcule le score tf-idf de chaque fichier
+    for file in nom_fichiers:
+        dico = score_tf_idf_text(file, "cleaned")
+        val = list(dico.values())
+
+        n = similiarite(vecteur, val)
+        L.append(n)
+
+    max = L[0]
+    for i in range(1, len(L)):
+        if L[i] > max:
+            max = L[i]
+
+    return max
+
+
+
+"""
+Cette fonction renvoie le mot avec le score TD-IDF le plus élévé
+"""
+def high_tf_idf_token(a, q_token):
+    max = a[0]
+
+    for i in range(1, len(a)):
+        if a[i] > max:
+            max = a[i]
+
+    doc = pertinence()
+    # with open()
+
+    return max
