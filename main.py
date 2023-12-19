@@ -89,7 +89,7 @@ def main():  # Fonction principale, execute le programme entier
         qu = input("Quelle est votre question?")
         print(generate_answer(qu))
         print("Le numéro du document pertinent est ", pertinent_document(matrix_tf_idf_2('cleaned'), tf_idf_token(qu),name_files('cleaned')) )
-
+        print("Vous trouverez votre reponse dans le document suivant : ", nom_doc(pertinent_document(matrix_tf_idf_2('cleaned'), tf_idf_token(qu),name_files('cleaned')) )))
 
 
 
