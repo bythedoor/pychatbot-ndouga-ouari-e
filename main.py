@@ -5,7 +5,7 @@ from functions import *
 
 def main():  # Fonction principale, execute le programme entier
     print("************** BIENVENUE DANS CHATBOT ! **************")
-    print("Si vous souhaitez allez dans la section de la première partie merci de saisir 'partie 1")
+    print("Si vous souhaitez allez dans la section de la première partie merci de saisir 'partie 1 ou vous alors séléctionné 'partie 2' ou 'chatbot': ")
     mot = input()
 
     if mot == 'partie 1':
@@ -89,6 +89,8 @@ def main():  # Fonction principale, execute le programme entier
         if mot == 'chatbot':
             qu = input("Quelle est votre question?")
             print(generate_answer(qu))
+            print("Le numéro du document pertinent est ", pertinent_document(matrix_tf_idf_2('cleaned'), tf_idf_token(qu),name_files('cleaned')) )
+
 
 
 
