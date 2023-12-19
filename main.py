@@ -71,7 +71,25 @@ def main():  # Fonction principale, execute le programme entier
                     print(i, end=", ")
                 cpt += 1
         if mot == 'partie 2':
-            print()
+            print("1 - 2ème matrice ")
+            print("2 - Pose une question pour obtenir le vecteur")
+
+
+            # L'utilisateur choisit une des fonctionnalités, numérotées de 1 à 6
+            n = -1
+            while n < 0 or n > 6:
+                n = int(input("Choississez un nombre >> "))
+
+            # Un programme s'exécute en fonction de la fonctionnalité choisie
+            if n == 1:
+                print(matrix_tf_idf_2('cleaned'))
+            elif n == 2:
+                question = input("Quelle est votre question?")
+                print(tf_idf_token(question))
+        if mot == 'chatbot':
+            qu = input("Quelle est votre question?")
+            print(generate_answer(qu))
+
 
 
 # tests
