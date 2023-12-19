@@ -302,24 +302,6 @@ def matrix_tf_idf(directory):
 
     return matrix_tf_idf
 
-"""
-from collections import defaultdict
-
-def matrix_tf_idf(directory):
-    matrix_tf_idf = defaultdict(list)
-    d_idf = idf(directory)  # Supposons que vous avez déjà implémenté la fonction idf
-
-    for word in d_idf.keys():
-        for doc in os.listdir(directory):
-            if doc.endswith(".txt"):
-
-                d_tf_idf_text = score_tf_idf_text(doc, directory)  # Supposons que vous avez déjà implémenté la fonction score_tf_idf_text
-
-                # Ajouter le score TF-IDF du mot à la liste correspondante
-                matrix_tf_idf[word].append(d_tf_idf_text.get(word, 0))
-
-    return matrix_tf_idf
-"""
 
 
 """
@@ -327,18 +309,18 @@ Cette fonction renvoie la liste des mots dont le score TD-IDF est nul
 """
 
 def null_tf_idf(directory):
-    #on appelle notre matrice tf-idf
+    #L = list_of_files(directory, '.txt')
     matrice = matrix_tf_idf('cleaned')
-    mot_score_nul = [] # création de la matrice qui contiendra les mots avec un score nul
+    mot_score_nul = []
     for mot, scores in matrice.items():
         nul = True
         for score in scores:
-            if score != 0.0: # si le score est différent de 0.0 alors notre booléen est Faux
+            if score != 0.0:
                 nul = False
-        if nul: # si le booléen nul est vrai alors on rajoute la notre mot qui possède une valeur égal à 0.0 dans notre liste
+        if nul:
             mot_score_nul.append(mot)
 
-    return mot_score_nul
+    return mot_score_nul #, len(mot_score_nul)
 
 
 """
@@ -346,7 +328,6 @@ Cette fonction renvoie la liste des mots avec le score TD-IF le plus élevé
 """
 # Fonction intermédaire qui récupère le maximum d'une liste
 def max_list(L):
-    """ list --> float """
     max = 0
     for i in L:
         if i > max:
@@ -355,19 +336,20 @@ def max_list(L):
 
 
 def high_tf_idf(directory):
-    L = name_files(directory) # on récupère le nom de chaque dossier
-    max = 0 # création de la variable max qui stoquera le score du plus haut score
+    L = name_files(directory)
+    M = []
+    max = 0
     l_mot = []
-    matrice = matrix_tf_idf('cleaned') # on appelle notre matrice tf-idf
+    matrice = matrix_tf_idf('cleaned')
     for mot, scores in matrice.items():
-        # on appelle notre fonction intermédiaire qui récupère la valeur maximum d'une liste
+
         maxi = max_list(scores)
-        if maxi > max: # si le max des tf-idf d'un mot est plus grand que notre valeur stoqué alors on la remplace
+        if maxi > max:
             max = maxi
             l_mot = []
             l_mot.append(mot)
 
-        elif maxi == max: # si la valeur est la même alors on ajoute le nouveau mot à la liste
+        elif maxi == max:
             l_mot.append(mot)
 
     return l_mot
@@ -396,7 +378,7 @@ def chirac(directory):
                         mot_plus_repete = word
                     elif count == occ and word not in mot_score_nul:
                         mot_plus_repete += ", " + word
-
+    #jf
     # Création de la phrase réponse
     phrase = "Le(s) mot(s) le(s) plus répété(s) est/sont '" + mot_plus_repete + "'"
 
@@ -419,38 +401,34 @@ def mot_dit(mot):
     """
     :param mot: str --> list """
     corpus = name_files('cleaned')
-    # on rappelle notre matrice td-idf
+
     matrix = matrix_tf_idf('cleaned')
-    # on crée une liste dans laquelle sera stocké les noms des présidents
     l_president = []
-    # on récupère les noms de famille des présidents
     nom = list_last_names("cleaned")
 
     cpt = 0
 
     for doc in corpus:
-        if mot in matrix: # si le mot est dans la matrice
-            if matrix[mot][cpt] != 0: # Si le mot est dit par un président (son tfidf est strictement différent 0)
-                # On fait en sorte de récupérer les noms en fonction du texte
-                if ( (cpt == 1 or cpt == 6) and (matrix[mot][cpt -1] == 0) ) or ( cpt != 1 and cpt != 6):
-                    if cpt == 0 or cpt == 1:
-                        nom_p = nom[0]
-                    elif cpt <= 5 and cpt >= 2 :
-                        nom_p = nom[cpt - 1]
-                    elif cpt == 5 or cpt == 6:
-                        nom_p = nom[4]
-                    else:
-                        nom_p = nom[5]
-                    l_president.append(nom_p)
-        cpt += 1 # incrémentation de 1 au compteur
-    d_presidents = presidents('cleaned') # on appelle le dictionnaire qui nous renvoie le nom et prénom des présidents
-    cpt = 0 # nouveau compteur pour parcourir notre fonction l_president dans la boucle qui suit
+        if matrix[mot][cpt] != 0: # Si le mot est dit par un président (son tfidf est strictement différent 0)
+            if ( (cpt == 1 or cpt == 6) and (matrix[mot][cpt -1] == 0) ) or ( cpt != 1 and cpt != 6):
+                if cpt == 0 or cpt == 1:
+                    nom_p = nom[0]
+                elif cpt <= 5 and cpt >= 2 :
+                    nom_p = nom[cpt - 1]
+                elif cpt == 5 or cpt == 6:
+                    nom_p = nom[4]
+                else:
+                    nom_p = nom[5]
+                l_president.append(nom_p)
+        cpt += 1
+    d_presidents = presidents('cleaned')
+    cpt = 0
     for nom in l_president: # On parcours la liste des présidents qui ont dis le mots et on ajoute leur prénom
         prenom = d_presidents[nom]
-        l_president[cpt] = "{1} {0}".format(nom, prenom) # on relit chaque prénom à son nom de famille
+        l_president[cpt] = "{1} {0}".format(nom, prenom)
         cpt += 1
 
-    return set(l_president) # on retourne en supprimant les doublons
+    return set(l_president)
 """
 def ecology(directory):
     L = name_files(directory)
@@ -502,35 +480,11 @@ def intersection(q_token, directory):
 
 
 """
-Cette fonction trace une matrice TF-IDF avec comme nombre de ligne le nombre de documents et comme nombre de colonne le nombre de mot
-"""
-def matrix_tf_idf_2(directory):
-    # création de la nouvelle matrice
-    matrice_tf_idf = {}
-    # appel de notre dictionnaire contenant l'IDF de chaque mot
-    d_idf = idf(directory)
-    cpt = 1
-    for doc in os.listdir(directory):
-        if doc.endswith(".txt"):
-            # appel de la fonction qui nous permet de calculer le score tf_idf de chaque mot d'un document
-            d_tf_idf_text = score_tf_idf_text(doc, directory)
-            # On parcours le dictionnaire en disant que si le mot n'est pas dans notre document actuel on l'ajoute dans le dictionnaire avec un score de 0
-            for mot in d_idf.keys():
-                if mot not in d_tf_idf_text:
-                    d_tf_idf_text[mot] = 0
-            # on ajoute à notre matrice les scores d'un texte correspondant à une ligne de la matrice
-            matrice_tf_idf[cpt] = d_tf_idf_text
-            cpt += 1 # incrémentation du compteur
-
-    return matrice_tf_idf
-
-
-
-"""
 Calcule le score tf-idf de chaque mot d'une question
 """
-"""
-def tf_idf_token1(q_token):
+
+
+def tf_idf_token(q_token):
     L = []
 
     # calcul du score tf d'un mot
@@ -553,46 +507,7 @@ def tf_idf_token1(q_token):
             L[i] *= dico[q_token[i]]
 
     return L
-"""
-def tf_idf_token(question_words):
 
-    idf_scores = idf('cleaned')
-    corpus_directory = 'cleaned'
-
-    word_indices = {word: index for index, word in enumerate(idf_scores)}
-
-    # Initialiser le vecteur TF-IDF de la question avec des zéros
-    tfidf_vector = [0] * len(idf_scores)
-
-    # création du dictionnaire TF
-    tf_scores = {}
-    for word in question_words:
-        tf_scores[word] = tf_scores.get(word, 0) + 1 # Calcul du le score TF pour chaque mot dans la question
-
-    # Calcul du vecteur TF-IDF de la question
-    for word, tf_score in tf_scores.items():
-        if word in word_indices:
-            # Obtenir l'indice du mot dans le vecteur TF-IDF
-            word_index = word_indices[word]
-            # Calcul du score TF-IDF
-            tfidf_vector[word_index] = tf_score * idf_scores[word]
-
-    return tfidf_vector
-
-
-"""
-Cette fonction calcume le produit scalaire de 2 vecteurs
-"""
-def scalaire(vector1, vector2):
-    """
-    :param vector1: list
-    :param vector2: list
-    :return: float
-    """
-    r = 0
-    for a, b in zip(vector1, vector2): # on parcourt nos vecteur
-        r += a*b # somme du produit des valeurs des vecteur
-    return r
 
 
 def norme_vecteur(a):
@@ -605,165 +520,8 @@ def norme_vecteur(a):
 
     return norme
 
-"""
-
-"""
 def similiarite(a, b):
-    """
-    :param a: list
-    :param b: list
-    :return: float
-    """
+
     score = scalaire(a,b)/(norme_vecteur(a) * norme_vecteur(b))
+
     return score
-
-
-
-"""
-Cette fonction cherche le document le plus pertinent en fonction d'une question
-"""
-def pertinent_document(matrix_tf_idf, tf_idf_question, file_names):
-    """
-    :param matrix_tf_idf: dict
-    :param tf_idf_question: list
-    :param file_names: list
-    :return: int
-    """
-    # création d'une liste qui contiendra des tuples avec pour indice 0 le numéro du document et pour indice 1 sa similarité de la question avec le texte
-    similarities = []
-    # on parcourt notre matrice en calculant la similarité de la question avec chaque document
-    for file_name, tf_idf_document in matrix_tf_idf.items():
-        similarity = similiarite(tf_idf_question, tf_idf_document.values())
-        # Ajout du tuple (nom du fichier, similarité) à la liste
-        similarities.append((file_name, similarity))
-
-    # similarities est sous la forme d'une liste de tuple qui se présente sous cette forme par exemple :
-    #      [(1, 0.002541010400780367), (2, 0.009072093485126885), (3, 0.01370473110839329), (4, 0.011269141152593542), (5, 0.00402094976692348), (6, 0.0016239725918885922), (7, 0.014392802677315311), (8, 0.007711421122439618)]
-
-    maxi = 0
-    nb_doc = 0
-
-    # Récupération du nom du fichier avec la plus grande similarité
-    for tuple in similarities:
-        score = tuple[1]
-        if score > maxi:
-            maxi = score
-            nb_doc = tuple[0]
-
-    return nb_doc
-
-
-# fonction intermédiaire qui en fonction du numéro du document envoie le nom du document
-def nom_doc(nb_doc):
-    """
-    :param nb_doc: int
-    :return: str
-    """
-    corpus = os.listdir('cleaned')
-    return corpus[nb_doc-1]
-
-
-"""
-Cette fonction génère une réponse à partir d'une question donnée
-"""
-def generate_answer(question):
-    """
-    :param question: str
-    :return: str
-    """
-    matrice = matrix_tf_idf_2('cleaned')
-
-    nb_doc = pertinent_document(matrice, tf_idf_token(question), name_files('cleaned'))
-    doc_sp = name_files('speeches')
-    doc = doc_sp[nb_doc-1]
-
-    # Extraire le mot avec le score TF-IDF le plus élevé du vecteur de la question
-    #max_tfidf_word = max(question, key=lambda x: question[x])
-
-    score_question = tf_idf_token(question)
-
-    max_tfidf_word = None
-    max_tfidf_score = -1  # Initialiser à une valeur négative, car les scores TF-IDF sont généralement positifs
-    q_tf_idf = []
-    l_question = question.split()
-    cpt = 0
-    # Parcourir le dictionnaire question pour trouver le mot avec le score TF-IDF le plus élevé
-    for tfidf_score in score_question:
-        if tfidf_score > max_tfidf_score:
-
-            max_tfidf_score = tfidf_score
-
-        if tfidf_score != 0:
-            q_tf_idf.append(tfidf_score)
-            max_tfidf_word = l_question[cpt]
-            cpt += 1
-
-
-    """
-    # Charger le document pertinent
-    with open(os.path.join('./speeches', doc), 'r', encoding='utf-8') as file:
-        content = file.read()
-    """
-
-    mot_impotant = high_tf_idf('cleaned')
-    with open(os.path.join('./speeches', doc), 'r', encoding='utf-8') as f1:
-        speech = f1.read()
-        # Divise le texte en une liste de pharse
-        content = speech.split(".")
-
-        position_word = -1
-        index = 0
-        while index < len(content) and position_word == -1:
-
-            # On trouve la position du mot dans la liste
-            if mot_impotant in content[index]:
-                position_word = index
-            index += 1
-
-        if position_word == -1:
-            return None
-        # On retourne la phrase entière de l'indice
-        sentence = content[position_word]
-        word_question = question.split()
-        if word_question[0] in question_starters:
-            final_sentence = question_starters[word_question[0]] + sentence
-        else:
-            final_sentence = sentence
-
-    """
-    # Trouver la première occurrence du mot dans le document et extraire la phrase qui le contient
-    start_index = content.find(max_tfidf_word)
-    end_index = content.find('.', start_index)
-
-    rep = content[start_index:end_index + 1].strip()
-    """
-    return  #rep, max_tfidf_score, max_tfidf_word, start_index, end_index
-
-
-"""
-Cette fonction apporte plus de d'âme à la réponse générée
-"""
-def add_politeness(question, response):
-    """
-    :param question: str
-    :param response: str
-    :return: str
-    """
-    # Dictionnaire de débuts de questions et réponses associées
-    question_starters = {
-        "Comment": "Après analyse, ",
-        "Pourquoi": "Car, ",
-        "Peux-tu": "Oui, bien sûr!"
-    }
-
-    # Extraire le début de la question
-    question_words = question.split()
-    question_starter = question_words[0] if question_words else None
-
-    # Ajouter une réponse spécifique si le début de la question est connu
-    if question_starter in question_starters:
-        polite_response = question_starters[question_starter] + response
-    else:
-        polite_response = response
-
-    return polite_response

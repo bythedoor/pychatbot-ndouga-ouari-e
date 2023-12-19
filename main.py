@@ -25,11 +25,14 @@ def main():  # Fonction principale, execute le programme entier
         p = null_tf_idf("cleaned")
         if len(p) == 0:
             print("Il n'y a pas de mots au score TF-IDF nul")
+
+        # on affiche les mots les moins utilisés séparés par un espace
         else:
             print("Les mots non importants sont: ")
             for i in p:
                 print(p[i], end=" ,")
     elif n == 2:
+        # on initialise une variable avec la liste des mots les plus utilisés
         p = high_tf_idf(("cleaned"))
         print("Les mots importants sont: ", end=" ")
         for i in range(len(p)):
@@ -67,6 +70,10 @@ def main():  # Fonction principale, execute le programme entier
     #    print("0")
 
 
+# tests
+print(score_tf_idf_text("Nomination_Chirac1_clean.txt", "cleaned"))
+t = score_tf_idf_text("Nomination_Chirac1_clean.txt", "cleaned")
+print(list(t.values()))
 
 
 if __name__ == "__main__":
