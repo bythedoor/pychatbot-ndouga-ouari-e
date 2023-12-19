@@ -17,7 +17,6 @@ def main():  # Fonction principale, execute le programme entier
         print("3 - Les mots les plus répétés par Chirac")
         print("4 - Liste des présidents mentionant le mot 'Nation', et celui qui le dit plus souvent")
         print("5 - Le premier président à parler d'écologie ou du climat")
-        #print("6 - Liste des mots que tous les présidents ont mentionné")
 
         # L'utilisateur choisit une des fonctionnalités, numérotées de 1 à 6
         n = -1
@@ -70,26 +69,26 @@ def main():  # Fonction principale, execute le programme entier
                 else:
                     print(i, end=", ")
                 cpt += 1
-        if mot == 'partie 2':
-            print("1 - 2ème matrice ")
-            print("2 - Pose une question pour obtenir le vecteur")
+    if mot == 'partie 2':
+        print("1 - 2ème matrice ")
+        print("2 - Pose une question pour obtenir le vecteur")
 
 
-            # L'utilisateur choisit une des fonctionnalités, numérotées de 1 à 6
-            n = -1
-            while n < 0 or n > 6:
-                n = int(input("Choississez un nombre >> "))
+        # L'utilisateur choisit une des fonctionnalités, numérotées de 1 à 6
+        n = -1
+        while n < 0 or n > 6:
+            n = int(input("Choississez un nombre >> "))
 
-            # Un programme s'exécute en fonction de la fonctionnalité choisie
-            if n == 1:
-                print(matrix_tf_idf_2('cleaned'))
-            elif n == 2:
-                question = input("Quelle est votre question?")
-                print(tf_idf_token(question))
-        if mot == 'chatbot':
-            qu = input("Quelle est votre question?")
-            print(generate_answer(qu))
-            print("Le numéro du document pertinent est ", pertinent_document(matrix_tf_idf_2('cleaned'), tf_idf_token(qu),name_files('cleaned')) )
+        # Un programme s'exécute en fonction de la fonctionnalité choisie
+        if n == 1:
+            print(matrix_tf_idf_2('cleaned'))
+        elif n == 2:
+            question = input("Quelle est votre question?")
+            print(tf_idf_token(question))
+    if mot == 'chatbot':
+        qu = input("Quelle est votre question?")
+        print(generate_answer(qu))
+        print("Le numéro du document pertinent est ", pertinent_document(matrix_tf_idf_2('cleaned'), tf_idf_token(qu),name_files('cleaned')) )
 
 
 
