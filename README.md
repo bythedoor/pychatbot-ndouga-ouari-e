@@ -16,6 +16,9 @@ https://github.com/bythedoor/pychatbot-ndouga-ouari-e
 ## Bugs
 * Dans la fonction list_last_names(), on a la valeur "Giscard dEstaing"
 au lieu de "Giscard d'Estaing"
+* les fonctions pertinence() et high_tf_idf_token() ne sont pas terminées :(
+* La fonction matrix_tf_idf() met beaucoup de temps à s'exécuter
+* La fonction nation() ne trouve pas les fichiers à étudier
 * La fonction matrix_tf_idf() met beaucoup de temps à s'exécuter
 * la fonction generate_answer ne renvoie pas le bon texte
 * le menu n'est pas fini
